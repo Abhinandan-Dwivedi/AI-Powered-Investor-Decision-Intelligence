@@ -1,0 +1,50 @@
+.insight-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+  margin: 0 var(--space-5) var(--space-5);
+}
+
+.insight-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 15px;
+  margin: 0 0 var(--space-3);
+}
+
+.insight-heading-gain {
+  color: var(--gain);
+}
+.insight-heading-loss {
+  color: var(--loss);
+}
+
+.insight-glyph {
+  font-size: 11px;
+}
+
+.insight-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.insight-list li {
+  padding-left: var(--space-3);
+  border-left: 1px solid var(--rule-on-ink);
+  color: var(--text-on-ink-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+@media (max-width: 900px) {
+  .insight-columns {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Env
+.env
+
+# Data (raw uploads shouldn't be committed)
+backend/data/raw_pdfs/*
+backend/data/markdown/*
+!backend/data/raw_pdfs/.gitkeep
+!backend/data/markdown/.gitkeep
+
+# Node / React
+node_modules/
+frontend/dist/
+frontend/build/
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/

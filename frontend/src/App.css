@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  height: 100vh;
+}
+
+.app-main {
+  overflow-y: auto;
+}
+
+.app-toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.app-toolbar-select {
+  padding: var(--space-4) var(--space-5) 0 0;
+}
+
+.app-load-error {
+  margin: var(--space-3) var(--space-5) 0;
+  color: var(--loss);
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .app-toolbar {
+    flex-direction: column;
+  }
+}

@@ -12,6 +12,7 @@ export default function InsightColumns({ metric }) {
         <h3 className="insight-heading insight-heading-gain">
           <span className="insight-glyph">▲</span> Growth drivers
         </h3>
+        <p className="insight-description">Key factors that may drive future growth.</p>
         <ul className="insight-list">
           {metric.growth_drivers.map((point, i) => (
             <li key={i}>{point}</li>
@@ -23,6 +24,7 @@ export default function InsightColumns({ metric }) {
         <h3 className="insight-heading insight-heading-loss">
           <span className="insight-glyph">▼</span> Risk factors
         </h3>
+        <p className="insight-description">Key risks and potential headwinds.</p>
         <ul className="insight-list">
           {metric.risk_factors.map((point, i) => (
             <li key={i}>{point}</li>

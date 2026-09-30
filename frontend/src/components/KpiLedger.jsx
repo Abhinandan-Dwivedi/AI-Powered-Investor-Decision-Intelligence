@@ -22,7 +22,10 @@ export default function KpiLedger({ metric }) {
   return (
     <section className="kpi-ledger">
       <div className="kpi-ledger-header">
-        <h2 className="panel-heading">Key figures</h2>
+        <div className="kpi-ledger-title">
+          <h2 className="panel-heading">Key figures</h2>
+          <p>Key financial metrics from the ingested filing.</p>
+        </div>
         <span className="kpi-ledger-scope">
           {metric.company} · FY{metric.fiscal_year}
         </span>

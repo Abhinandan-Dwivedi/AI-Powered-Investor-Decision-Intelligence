@@ -1,50 +1,50 @@
 .insight-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-5);
-  margin: 0 var(--space-5) var(--space-5);
+  gap: 12px;
+  margin: 0 0 8px;
 }
-
+.insight-column {
+  min-width: 0;
+  padding: 16px 18px;
+  border: 1px solid #ccefe0;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #effbf5, #fafffc);
+  box-shadow: var(--shadow-sm);
+}
+.insight-column:last-child { border-color: #ffd9dc; background: linear-gradient(145deg, #fff3f3, #fffbfb); }
 .insight-heading {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 10px;
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 15px;
-  margin: 0 0 var(--space-3);
+  font-weight: 650;
+  font-size: 19px;
+  margin: 0 0 10px;
 }
-
-.insight-heading-gain {
-  color: var(--gain);
-}
-.insight-heading-loss {
-  color: var(--loss);
-}
-
+.insight-heading-gain { color: #101b2e; }
+.insight-heading-loss { color: #101b2e; }
 .insight-glyph {
-  font-size: 11px;
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: #ccf4df;
+  color: #07944f;
+  font-size: 14px;
 }
-
-.insight-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
+.insight-column:last-child .insight-glyph { background: #ffe0e2; color: #ed3146; }
+.insight-description { margin: -7px 0 8px 42px; color: #65728a; font-size: 12px; }
+.insight-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0; }
 .insight-list li {
-  padding-left: var(--space-3);
-  border-left: 1px solid var(--rule-on-ink);
-  color: var(--text-on-ink-muted);
+  position: relative;
+  padding: 8px 0 8px 24px;
+  border-top: 1px solid rgb(26 49 84 / 6%);
+  color: #39465c;
   font-size: 13px;
-  line-height: 1.55;
+  line-height: 1.5;
 }
-
-@media (max-width: 900px) {
-  .insight-columns {
-    grid-template-columns: 1fr;
-  }
-}
+.insight-list li::before { content: ""; position: absolute; left: 4px; top: 14px; width: 9px; height: 9px; border-radius: 50%; background: #0b9c59; }
+.insight-column:last-child .insight-list li::before { background: #f02b40; }
+@media (max-width: 900px) { .insight-columns { grid-template-columns: 1fr; } }

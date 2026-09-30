@@ -33,7 +33,10 @@ export default function UploadPanel({ onIngested }) {
 
   return (
     <section className="upload-panel">
-      <h2 className="panel-heading">Ingest a report</h2>
+      <div className="upload-copy">
+        <h2 className="panel-heading">Ingest a report</h2>
+        <p>Upload a company’s financial report to extract key insights.</p>
+      </div>
 
       <div className="upload-fields">
         <input
@@ -67,7 +70,7 @@ export default function UploadPanel({ onIngested }) {
         role="button"
         tabIndex={0}
       >
-        <p className="dropzone-label">Drop a PDF here, or click to browse</p>
+        <p className="dropzone-label">Drag &amp; drop a PDF here<br /><span>or click to browse</span></p>
         <input
           ref={inputRef}
           type="file"

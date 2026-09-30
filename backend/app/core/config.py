@@ -46,8 +46,8 @@ class Settings(BaseSettings):
     anthropic_api_key: str | None = None
     gemini_api_key: str | None = None
 
-    chat_model: str = "gemini-flash-latest"
-    extraction_model: str = "gemini-flash-latest"
+    chat_model: str = "gemini-3.5-flash-lite"
+    extraction_model: str = "gemini-3.5-flash-lite"
     embedding_model: str = "gemini-embedding-001"
     embedding_dimensions: int = 1536  # Gemini supports scaling down from 3072 via MRL
 

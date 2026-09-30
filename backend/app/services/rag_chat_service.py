@@ -26,8 +26,14 @@ def answer_question(
     question: str,
     company: str | None = None,
     fiscal_year: int | None = None,
+    use_reranking: bool = True,
 ) -> dict:
-    """Returns {"answer": str, "sources": list[dict]}."""
+    """Returns {"answer": str, "sources": list[dict]}.
+
+    use_reranking exists specifically so the eval harness can A/B test
+    the reranking step's actual impact — set it False to take the raw
+    top-N vector search results directly, bypassing the LLM rerank call.
+    """
 
     # 1. Embed the question with the SAME embedding model used at ingestion —
     #    mixing embedding models between ingestion and query would produce
@@ -54,14 +60,20 @@ def answer_question(
             "company": r.payload["company"],
             "fiscal_year": r.payload["fiscal_year"],
             "source_file": r.payload["source_file"],
+            "relevance_score": r.score,  # raw vector similarity score, used when reranking is skipped
         }
         for r in raw_results
     ]
 
-    # 3. Rerank: narrow from retrieval_top_k (broad recall) down to
-    #    rerank_top_k (precise, actually-relevant chunks) before they
-    #    ever reach the LLM's context window.
-    top_chunks = rerank(question, candidates, top_k=settings.rerank_top_k)
+    if use_reranking:
+        # 3a. Rerank: narrow from retrieval_top_k (broad recall) down to
+        #     rerank_top_k (precise, actually-relevant chunks) before they
+        #     ever reach the LLM's context window.
+        top_chunks = rerank(question, candidates, top_k=settings.rerank_top_k)
+    else:
+        # 3b. Bypass path for the A/B test: just take the top-N by raw
+        #     vector similarity score, no LLM rerank call at all.
+        top_chunks = candidates[: settings.rerank_top_k]
 
     # 4. Build the grounded prompt from only the reranked, relevant chunks.
     context_block = "\n\n---\n\n".join(

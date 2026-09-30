@@ -1,29 +1,24 @@
 .masthead {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  padding: var(--space-5) var(--space-5) var(--space-4);
-  border-bottom: 1px solid var(--rule-on-ink);
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  min-height: 98px;
+  padding: 14px 320px 14px 8px;
 }
-
 .masthead-title {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 34px;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  font-size: clamp(27px, 2.5vw, 36px);
+  letter-spacing: -0.035em;
+  line-height: 1.15;
   margin: 0;
-  color: var(--text-on-ink);
+  color: #111827;
 }
-
-.masthead-tagline {
-  margin: var(--space-1) 0 0;
-  color: var(--text-on-ink-muted);
-  font-size: 13px;
-}
-
-.masthead-mark {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 28px;
-  color: var(--brass);
+.masthead-tagline { margin: 5px 0 0; color: #7886a0; font-size: 15px; }
+.masthead-mark { order: -1; font-family: var(--font-display); font-style: italic; font-size: 42px; color: #f0aa2f; line-height: 1; }
+@media (max-width: 640px) {
+  .masthead { min-height: 82px; padding: 12px 0; gap: 12px; }
+  .masthead-mark { font-size: 34px; }
+  .masthead-tagline { font-size: 12px; }
 }

@@ -1,11 +1,11 @@
 :root {
-  --ink: #12151c;
-  --ink-raised: #1a1e27;
+  --ink: #101b2d;
+  --ink-raised: #1b2b43;
   --paper: #fff;
-  --paper-line: #e4eaf2;
-  --brass: #efa91c;
-  --gain: #09975b;
-  --loss: #e51d35;
+  --paper-line: #e6ebf2;
+  --brass: #d69b2d;
+  --gain: #087d5a;
+  --loss: #c94b57;
   --text-on-ink: #17233a;
   --text-on-ink-muted: #6d7c98;
   --text-on-paper: #17233a;
@@ -24,7 +24,7 @@
 * { box-sizing: border-box; }
 html, body, #root { min-height: 100%; margin: 0; }
 body {
-  background: #f7f9fc;
+  background: #f3f6fa;
   color: #17233a;
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 14px;
@@ -34,7 +34,7 @@ body {
 .tabular { font-variant-numeric: tabular-nums; }
 button, input, select { font-family: inherit; font-size: inherit; color: inherit; }
 button { cursor: pointer; }
-:focus-visible { outline: 2px solid #1769f5; outline-offset: 2px; }
+:focus-visible { outline: 2px solid #2f6fce; outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 ::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-thumb { background: #d6dfeb; border-radius: 8px; }
+::-webkit-scrollbar-thumb { background: #cbd5e2; border: 2px solid #f3f6fa; border-radius: 8px; }

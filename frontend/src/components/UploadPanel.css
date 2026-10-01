@@ -1,21 +1,21 @@
 .upload-panel {
   flex: 0 0 auto;
-  min-height: 164px;
+  min-height: 172px;
   display: grid;
   grid-template-columns: minmax(300px, 1.2fr) minmax(260px, .9fr);
   grid-template-rows: auto 1fr auto;
   grid-template-areas: "intro drop" "fields drop" "status status";
   align-items: center;
-  column-gap: 20px;
-  row-gap: 8px;
-  padding: 16px 20px;
+  column-gap: 24px;
+  row-gap: 10px;
+  padding: 20px 22px;
   background: #fff;
   border: 1px solid var(--border-color);
-  border-radius: 14px;
+  border-radius: 16px;
   box-shadow: var(--shadow-sm);
 }
 .upload-copy { grid-area: intro; align-self: center; }
-.upload-copy .panel-heading { font-size: 21px; }
+.upload-copy .panel-heading { font-size: 22px; }
 .upload-copy p { margin: 2px 0 0; color: var(--text-secondary); font-size: 13px; }
 .upload-fields { grid-area: fields; display: flex; gap: 10px; margin: 6px 0 0; }
 .ledger-input {
@@ -23,9 +23,9 @@
   min-width: 0;
   flex: 1;
   background: #fff;
-  border: 1px solid #dfe6f0;
-  border-radius: 10px;
-  padding: 12px 14px;
+  border: 1px solid #dce4ee;
+  border-radius: 13px;
+  padding: 13px 15px;
   color: var(--text-primary);
   box-shadow: inset 0 1px 2px rgb(26 49 84 / 2%);
 }
@@ -37,16 +37,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px dashed #82aaff;
-  border-radius: 11px;
+  border: 1.5px dashed #9ab5db;
+  border-radius: 13px;
   padding: 18px;
   text-align: center;
-  background: #f8fbff;
+  background: #f7f9fc;
   transition: border-color .15s ease, background .15s ease;
 }
-.dropzone:hover, .dropzone-active { border-color: #1769f5; background: #eff6ff; }
+.dropzone:hover, .dropzone-active { border-color: #2f6fce; background: #eef4fc; }
 .dropzone-label { margin: 0; color: #263650; font-size: 14px; }
-.dropzone-label::before { content: "☁"; display: block; margin: 0 auto 5px; color: #1769f5; font-size: 29px; line-height: 1; }
+.dropzone-label::before { content: "☁"; display: block; margin: 0 auto 5px; color: #4779bc; font-size: 29px; line-height: 1; }
 .dropzone-label span { color: #7188af; font-size: 13px; }
 .upload-status { grid-area: status; margin: 2px 0 0; font-size: 13px; }
 .status-pending { color: var(--text-secondary); }

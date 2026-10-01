@@ -1,8 +1,8 @@
 .company-selector {
   min-width: 250px;
   background-color: #fff;
-  border: 1px solid #e1e8f1;
-  border-radius: 13px;
+  border: 1px solid #dce4ee;
+  border-radius: 12px;
   padding: 13px 38px 13px 16px;
   color: var(--text-primary);
   appearance: none;
@@ -10,7 +10,8 @@
   background-position: calc(100% - 17px) center, calc(100% - 12px) center;
   background-size: 5px 5px, 5px 5px;
   background-repeat: no-repeat;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 14px rgb(24 42 67 / 5%); transition: border-color .15s ease, box-shadow .15s ease;
 }
+.company-selector:hover { border-color: #b9c9dd; box-shadow: 0 6px 18px rgb(24 42 67 / 7%); }
 .company-selector option { background: #fff; color: var(--text-primary); }
 @media (max-width: 640px) { .company-selector { min-width: 220px; max-width: 100%; padding: 10px 34px 10px 12px; } }

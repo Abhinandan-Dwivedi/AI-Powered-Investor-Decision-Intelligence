@@ -3,20 +3,20 @@
   align-items: center;
   justify-content: flex-start;
   gap: 20px;
-  min-height: 98px;
-  padding: 14px 320px 14px 8px;
+  min-height: 104px;
+  padding: 18px 320px 18px 6px;
 }
 .masthead-title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(27px, 2.5vw, 36px);
+  font-size: clamp(29px, 2.7vw, 39px);
   letter-spacing: -0.035em;
   line-height: 1.15;
   margin: 0;
-  color: #111827;
+  color: #122039;
 }
-.masthead-tagline { margin: 5px 0 0; color: #7886a0; font-size: 15px; }
-.masthead-mark { order: -1; font-family: var(--font-display); font-style: italic; font-size: 42px; color: #f0aa2f; line-height: 1; }
+.masthead-tagline { margin: 5px 0 0; color: #718099; font-size: 14px; letter-spacing: .01em; }
+.masthead-mark { order: -1; font-family: var(--font-display); font-style: italic; font-size: 42px; color: #d79a2f; line-height: 1; }
 @media (max-width: 640px) {
   .masthead { min-height: 82px; padding: 12px 0; gap: 12px; }
   .masthead-mark { font-size: 34px; }

@@ -36,7 +36,7 @@ export function sendChatMessage({ question, company, fiscalYear }) {
 
 export function ingestReport({ file, company, fiscalYear }) {
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("file", file); 
   formData.append("company", company);
   formData.append("fiscal_year", fiscalYear);
   return request("/ingest", { method: "POST", body: formData });

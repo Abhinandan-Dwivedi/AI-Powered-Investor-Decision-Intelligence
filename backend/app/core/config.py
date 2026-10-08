@@ -7,6 +7,7 @@ module should call os.getenv directly — import `settings` instead.
 """
 from functools import lru_cache
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -14,7 +15,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     # --- App ---
-    app_name: str = "AI-Powered Investor Intelligence Platform"
+    app_name: str = "AI-Powered Investor Decision Intelligence" 
     environment: str = "development"  # development | production
 
     # --- Postgres ---
@@ -55,10 +56,29 @@ class Settings(BaseSettings):
     retrieval_top_k: int = 20
     rerank_top_k: int = 6
 
+    # --- Reranking ---
+    reranker_backend: str = "cross_encoder"  # "llm" | "cross_encoder" | "none"
+    cross_encoder_model: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+
     # --- Ingestion ---
     max_upload_size_mb: int = 25
     raw_pdf_dir: str = "data/raw_pdfs"
     markdown_dir: str = "data/markdown"
+
+    # --- Retention ---
+    # Only the newest N *completed* documents are kept; older ones are
+    # evicted (vectors, leftover PDFs, KPI rows, Document row) after each
+    # successful ingestion so storage doesn't grow without bound.
+    max_documents: int = 2
+
+    @field_validator("max_documents")
+    @classmethod
+    def _max_documents_at_least_one(cls, value: int) -> int:
+        # 0 would mean "evict everything", including the document that was
+        # just ingested — fail fast at startup instead of losing data.
+        if value < 1:
+            raise ValueError("max_documents must be >= 1")
+        return value
 
 
 @lru_cache

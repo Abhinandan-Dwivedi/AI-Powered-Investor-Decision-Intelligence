@@ -1,17 +1,38 @@
-.company-selector {
-  min-width: 250px;
-  background-color: #fff;
-  border: 1px solid #dce4ee;
-  border-radius: 12px;
-  padding: 13px 38px 13px 16px;
-  color: var(--text-primary);
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, #71819c 50%), linear-gradient(135deg, #71819c 50%, transparent 50%);
-  background-position: calc(100% - 17px) center, calc(100% - 12px) center;
-  background-size: 5px 5px, 5px 5px;
-  background-repeat: no-repeat;
-  box-shadow: 0 4px 14px rgb(24 42 67 / 5%); transition: border-color .15s ease, box-shadow .15s ease;
+.company-selector-wrap {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
-.company-selector:hover { border-color: #b9c9dd; box-shadow: 0 6px 18px rgb(24 42 67 / 7%); }
-.company-selector option { background: #fff; color: var(--text-primary); }
-@media (max-width: 640px) { .company-selector { min-width: 220px; max-width: 100%; padding: 10px 34px 10px 12px; } }
+.company-selector-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+  padding-left: 2px;
+}
+.company-selector {
+  min-width: 260px;
+  height: 46px;
+  padding: 0 42px 0 16px;
+  background-color: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  color: var(--ink-900);
+  font-weight: 600;
+  text-transform: capitalize;
+  appearance: none;
+  /* Chevron drawn as an inline SVG so it stays crisp at any zoom. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235d6b82' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-position: right 16px center;
+  background-repeat: no-repeat;
+  box-shadow: var(--shadow-xs);
+  transition: border-color .15s var(--ease), box-shadow .15s var(--ease);
+}
+.company-selector:hover { border-color: #b8c3d3; box-shadow: var(--shadow-sm); }
+.company-selector:focus { outline: none; border-color: var(--accent); box-shadow: var(--ring); }
+.company-selector option { background: #fff; color: var(--ink-900); }
+@media (max-width: 640px) { .company-selector { width: 100%; min-width: 0; } }

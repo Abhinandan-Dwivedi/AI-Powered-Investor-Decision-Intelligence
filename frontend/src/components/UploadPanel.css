@@ -1,60 +1,108 @@
 .upload-panel {
-  flex: 0 0 auto;
-  min-height: 172px;
   display: grid;
-  grid-template-columns: minmax(300px, 1.2fr) minmax(260px, .9fr);
-  grid-template-rows: auto 1fr auto;
+  grid-template-columns: minmax(0, 1.25fr) minmax(240px, .9fr);
   grid-template-areas: "intro drop" "fields drop" "status status";
   align-items: center;
-  column-gap: 24px;
-  row-gap: 10px;
-  padding: 20px 22px;
-  background: #fff;
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  box-shadow: var(--shadow-sm);
+  column-gap: 28px;
+  row-gap: 18px;
+  padding: 24px 26px;
 }
-.upload-copy { grid-area: intro; align-self: center; }
-.upload-copy .panel-heading { font-size: 22px; }
-.upload-copy p { margin: 2px 0 0; color: var(--text-secondary); font-size: 13px; }
-.upload-fields { grid-area: fields; display: flex; gap: 10px; margin: 6px 0 0; }
+.upload-copy { grid-area: intro; }
+
+.upload-fields { grid-area: fields; display: flex; gap: 12px; }
+.ledger-field { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.ledger-field-year { flex: 0 1 160px; }
+.ledger-field-label { font-size: 12px; font-weight: 600; color: var(--ink-700); }
 .ledger-input {
-  width: 0;
-  min-width: 0;
-  flex: 1;
-  background: #fff;
-  border: 1px solid #dce4ee;
-  border-radius: 13px;
-  padding: 13px 15px;
-  color: var(--text-primary);
-  box-shadow: inset 0 1px 2px rgb(26 49 84 / 2%);
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--ink-900);
+  box-shadow: var(--shadow-xs);
+  transition: border-color .15s var(--ease), box-shadow .15s var(--ease);
 }
-.ledger-input::placeholder { color: #7d8ba5; }
-.ledger-input:focus { border-color: #8ab1ff; outline: none; }
+.ledger-input::placeholder { color: var(--ink-400); }
+.ledger-input:hover { border-color: #b8c3d3; }
+.ledger-input:focus { outline: none; border-color: var(--accent); box-shadow: var(--ring); }
+/* Hide number spinners — fiscal year is typed, not stepped. */
+.ledger-input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+.ledger-input[type="number"]::-webkit-inner-spin-button,
+.ledger-input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
 .dropzone {
   grid-area: drop;
-  min-height: 116px;
+  align-self: stretch;
+  min-height: 150px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1.5px dashed #9ab5db;
-  border-radius: 13px;
-  padding: 18px;
+  gap: 12px;
+  padding: 20px;
   text-align: center;
-  background: #f7f9fc;
-  transition: border-color .15s ease, background .15s ease;
+  cursor: pointer;
+  border: 1.5px dashed #b9c6d8;
+  border-radius: var(--radius-md);
+  background:
+    radial-gradient(circle at 50% 0%, rgb(44 95 179 / 5%), transparent 70%),
+    var(--surface-sunken);
+  transition: border-color .18s var(--ease), background-color .18s var(--ease), transform .18s var(--ease);
 }
-.dropzone:hover, .dropzone-active { border-color: #2f6fce; background: #eef4fc; }
-.dropzone-label { margin: 0; color: #263650; font-size: 14px; }
-.dropzone-label::before { content: "☁"; display: block; margin: 0 auto 5px; color: #4779bc; font-size: 29px; line-height: 1; }
-.dropzone-label span { color: #7188af; font-size: 13px; }
-.upload-status { grid-area: status; margin: 2px 0 0; font-size: 13px; }
-.status-pending { color: var(--text-secondary); }
-.status-success { color: var(--gain); }
-.status-error { color: var(--loss); }
-.status-info { color: #b07600; }
+.dropzone-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--accent);
+  box-shadow: var(--shadow-sm);
+  transition: transform .18s var(--ease), background-color .18s var(--ease), color .18s var(--ease);
+}
+.dropzone:hover, .dropzone-active { border-color: var(--accent); background-color: var(--accent-soft); }
+.dropzone:hover .dropzone-icon, .dropzone-active .dropzone-icon { transform: translateY(-2px); background: var(--accent); color: #fff; border-color: var(--accent); }
+.dropzone-active { transform: scale(1.01); }
+.dropzone-label { margin: 0; color: var(--ink-900); font-size: 14px; font-weight: 600; }
+.dropzone-label span { display: block; margin-top: 2px; color: var(--ink-500); font-size: 12.5px; font-weight: 400; }
+
+.upload-status {
+  grid-area: status;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 13px;
+  font-weight: 500;
+  animation: status-in .25s var(--ease);
+}
+.upload-status-dot { flex: 0 0 8px; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.status-pending { color: var(--ink-700); background: var(--surface-sunken); border-color: var(--line); }
+.status-pending .upload-status-dot {
+  width: 12px; height: 12px; flex-basis: 12px;
+  background: none;
+  border: 2px solid var(--line-strong);
+  border-top-color: var(--accent);
+  animation: spin .8s linear infinite;
+}
+.status-success { color: var(--gain); background: var(--gain-soft); border-color: #cbe9dc; }
+.status-error { color: var(--loss); background: var(--loss-soft); border-color: #f1d0d5; }
+.status-info { color: var(--info); background: var(--info-soft); border-color: #efdfb8; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes status-in { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+
 @media (max-width: 760px) {
-  .upload-panel { grid-template-columns: 1fr; grid-template-rows: auto; grid-template-areas: "intro" "fields" "drop" "status"; padding: 16px; }
-  .dropzone { min-height: 100px; }
+  .upload-panel { grid-template-columns: 1fr; grid-template-areas: "intro" "fields" "drop" "status"; padding: 20px; row-gap: 16px; }
+  .dropzone { min-height: 130px; }
 }
-@media (max-width: 480px) { .upload-fields { flex-direction: column; } .ledger-input { width: 100%; } }
+@media (max-width: 480px) {
+  .upload-fields { flex-direction: column; }
+  .ledger-field-year { flex: 1 1 auto; }
+}

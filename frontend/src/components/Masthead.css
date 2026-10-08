@@ -1,24 +1,41 @@
 .masthead {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 20px;
-  min-height: 104px;
-  padding: 18px 320px 18px 6px;
+  gap: 16px;
+  min-width: 0;
+}
+.masthead-mark {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  background: linear-gradient(150deg, var(--navy-700), var(--navy-950));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 10%), 0 8px 20px rgb(14 26 46 / 22%);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 1;
+  color: var(--brass);
 }
 .masthead-title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(29px, 2.7vw, 39px);
-  letter-spacing: -0.035em;
-  line-height: 1.15;
+  font-size: clamp(26px, 2.4vw, 34px);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
   margin: 0;
-  color: #122039;
+  color: var(--ink-900);
 }
-.masthead-tagline { margin: 5px 0 0; color: #718099; font-size: 14px; letter-spacing: .01em; }
-.masthead-mark { order: -1; font-family: var(--font-display); font-style: italic; font-size: 42px; color: #d79a2f; line-height: 1; }
+.masthead-tagline {
+  margin: 4px 0 0;
+  color: var(--ink-500);
+  font-size: 13.5px;
+}
 @media (max-width: 640px) {
-  .masthead { min-height: 82px; padding: 12px 0; gap: 12px; }
-  .masthead-mark { font-size: 34px; }
-  .masthead-tagline { font-size: 12px; }
+  .masthead { gap: 12px; }
+  .masthead-mark { width: 44px; height: 44px; border-radius: 13px; font-size: 25px; }
+  .masthead-tagline { font-size: 12.5px; }
 }

@@ -36,23 +36,22 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <div className="app-main">
-        <Masthead />
-
-        <div className="app-toolbar">
-          <UploadPanel onIngested={reloadMetrics} />
-          {metrics.length > 0 && (
-            <div className="app-toolbar-select">
+      <main className="app-main">
+        <div className="app-main-inner">
+          <div className="app-header">
+            <Masthead />
+            {metrics.length > 0 && (
               <CompanySelector metrics={metrics} selected={selectedScope} onChange={setSelectedScope} />
-            </div>
-          )}
+            )}
+          </div>
+
+          {loadError && <p className="app-load-error">Could not reach the backend: {loadError}</p>}
+
+          <UploadPanel onIngested={reloadMetrics} />
+          <KpiLedger metric={activeMetric} />
+          <InsightColumns metric={activeMetric} />
         </div>
-
-        {loadError && <p className="app-load-error">Could not reach the backend: {loadError}</p>}
-
-        <KpiLedger metric={activeMetric} />
-        <InsightColumns metric={activeMetric} />
-      </div>
+      </main>
 
       <ChatPanel scope={selectedScope} />
     </div>

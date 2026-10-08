@@ -32,26 +32,33 @@ export default function UploadPanel({ onIngested }) {
   }
 
   return (
-    <section className="upload-panel">
+    <section className="upload-panel panel-card">
       <div className="upload-copy">
+        <p className="panel-eyebrow">01 · Source</p>
         <h2 className="panel-heading">Ingest a report</h2>
-        <p>Upload a company’s financial report to extract key insights.</p>
+        <p className="panel-subtitle">Upload a company’s financial report to extract key insights.</p>
       </div>
 
       <div className="upload-fields">
-        <input
-          className="ledger-input"
-          placeholder="Company (e.g. Apple)"
-          value={company}
-          onChange={(e) => setCompany(e.target.value)}
-        />
-        <input
-          className="ledger-input"
-          placeholder="Fiscal year"
-          type="number"
-          value={fiscalYear}
-          onChange={(e) => setFiscalYear(e.target.value)}
-        />
+        <label className="ledger-field">
+          <span className="ledger-field-label">Company</span>
+          <input
+            className="ledger-input"
+            placeholder="Company (e.g. Apple)"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+          />
+        </label>
+        <label className="ledger-field ledger-field-year">
+          <span className="ledger-field-label">Fiscal year</span>
+          <input
+            className="ledger-input"
+            placeholder="Fiscal year"
+            type="number"
+            value={fiscalYear}
+            onChange={(e) => setFiscalYear(e.target.value)}
+          />
+        </label>
       </div>
 
       <div
@@ -70,7 +77,17 @@ export default function UploadPanel({ onIngested }) {
         role="button"
         tabIndex={0}
       >
-        <p className="dropzone-label">Drag &amp; drop a PDF here<br /><span>or click to browse</span></p>
+        <span className="dropzone-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 16V4" />
+            <path d="m7 9 5-5 5 5" />
+            <path d="M20 16v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3" />
+          </svg>
+        </span>
+        <p className="dropzone-label">
+          Drag &amp; drop a PDF here
+          <span>or click to browse · PDF only</span>
+        </p>
         <input
           ref={inputRef}
           type="file"
@@ -80,7 +97,12 @@ export default function UploadPanel({ onIngested }) {
         />
       </div>
 
-      {status && <p className={`upload-status status-${status.kind}`}>{status.message}</p>}
+      {status && (
+        <p className={`upload-status status-${status.kind}`} role="status">
+          <span className="upload-status-dot" aria-hidden="true" />
+          {status.message}
+        </p>
+      )}
     </section>
   );
 }

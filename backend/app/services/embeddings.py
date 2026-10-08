@@ -12,10 +12,13 @@ friendlier for development than OpenAI's current pay-first model.
 """
 from tenacity import retry, stop_after_attempt, wait_exponential
 
-from app.core.config import settings
+from app.core.config import settings 
 
 _openai_client = None
 _gemini_client = None
+
+# Hard API limit on texts per Gemini embed_content request.
+_GEMINI_MAX_BATCH = 100
 
 
 def _get_openai_client():
@@ -43,7 +46,11 @@ def _embed_openai(texts: list[str]) -> list[list[float]]:
     return [item.embedding for item in response.data]
 
 
-@retry(stop=stop_after_attempt(4), wait=wait_exponential(multiplier=1, min=2, max=20))
+# Longer retry than OpenAI: the Gemini free tier allows ~100 embedded texts
+# per minute, so a report with >100 chunks hits 429 on its second batch.
+# Backoff of roughly 4+8+16+32+60s gives well over a minute of retrying,
+# enough to outlast one quota window instead of failing the ingestion.
+@retry(stop=stop_after_attempt(6), wait=wait_exponential(multiplier=2, min=4, max=60))
 def _embed_gemini(texts: list[str]) -> list[list[float]]:
     from google.genai import types
 
@@ -64,7 +71,13 @@ def embed_texts(texts: list[str]) -> list[list[float]]:
         return []
 
     if settings.llm_provider == "gemini":
-        return _embed_gemini(texts)
+        # Gemini rejects batches over 100 texts (400 INVALID_ARGUMENT), so a
+        # report with >100 chunks must be split. Batching here (not inside
+        # _embed_gemini) means a retry only re-sends the batch that failed.
+        vectors: list[list[float]] = []
+        for start in range(0, len(texts), _GEMINI_MAX_BATCH):
+            vectors.extend(_embed_gemini(texts[start : start + _GEMINI_MAX_BATCH]))
+        return vectors
     elif settings.llm_provider == "openai":
         return _embed_openai(texts)
     else:

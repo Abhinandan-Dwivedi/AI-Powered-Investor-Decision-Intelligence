@@ -9,10 +9,7 @@ sit close together in embedding space even if only one actually
 answers a specific question about margin change year-over-year.
 
 We use an LLM-as-reranker here (cheap Gemini/OpenAI call scoring each
-chunk 0-10) rather than a dedicated cross-encoder model, to avoid a
-heavy PyTorch dependency for a project at this scale. At larger scale,
-swapping this for a proper cross-encoder (e.g. BAAI/bge-reranker)
-would be the natural upgrade — same interface, different internals.
+chunk 0-10).
 """
 import json
 import re
@@ -30,11 +27,7 @@ the same order as given. Example: [8, 2, 5]"""
 
 
 def rerank(question: str, candidates: list[dict], top_k: int | None = None) -> list[dict]:
-    """
-    candidates: list of dicts, each with at least a "text" key (chunk content).
-    Returns the same dicts, sorted by relevance, truncated to top_k, with a
-    "relevance_score" key added.
-    """
+   
     if not candidates:
         return []
 
@@ -47,7 +40,7 @@ def rerank(question: str, candidates: list[dict], top_k: int | None = None) -> l
 
     try:
         raw_response = generate_answer(
-            system_prompt=RERANK_SYSTEM_PROMPT,
+            system_prompt=RERANK_SYSTEM_PROMPT, 
             user_prompt=user_prompt,
             model=settings.chat_model,
         )

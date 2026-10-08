@@ -22,6 +22,13 @@ async def lifespan(app: FastAPI):
     init_db()
     init_vector_store()
 
+    # Load the cross-encoder once at startup (only when it's the selected
+    # reranker) so the first chat request doesn't pay the model load time.
+    if settings.reranker_backend == "cross_encoder":
+        from app.services.cross_encoder_reranker import warm_up
+
+        warm_up()
+
     yield
     # Shutdown: nothing to clean up yet.
 
@@ -40,7 +47,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 @app.get("/health")
 def health_check():

@@ -24,3 +24,9 @@ langchain-text-splitters==0.3.4
 
 # --- Utilities ---
 python-dotenv==1.0.1
+
+# --- Cross-encoder reranker ---
+# CPU-only torch: the default Linux wheel bundles CUDA (~2.5 GB) we don't use.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.14.1+cpu
+sentence-transformers==6.1.0

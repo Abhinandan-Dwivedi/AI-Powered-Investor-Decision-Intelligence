@@ -1,15 +1,3 @@
-"""
-Ingestion orchestration: ties PDF conversion, chunking, embedding, and
-storage together.
-
-Idempotency design (fixing the reference project's gap): before doing
-any processing, we compute the file's content hash and check Postgres
-for an existing Document with that hash. If found, we skip
-re-processing entirely rather than creating duplicate chunks in
-Qdrant. This is the single most common real-world RAG bug — same
-file uploaded twice (by mistake, or as a "let me just re-upload to be
-safe") silently doubling every retrieval result.
-"""
 import uuid
 from pathlib import Path
 
@@ -22,6 +10,7 @@ from app.services.chunker import chunk_markdown
 from app.services.embeddings import embed_texts
 from app.services.kpi_extractor import extract_kpis
 from app.services.pdf_processor import compute_content_hash, pdf_to_markdown
+from app.services.retention import enforce_retention
 from app.services.vector_store import upsert_chunks
 
 
@@ -116,6 +105,11 @@ def ingest_document(
         db.commit()
         db.refresh(document)
 
+        # The raw PDF is only needed for conversion. Chunks now live in
+        # Qdrant (and KPI extraction reads from there), so keeping the
+        # file just grows disk usage forever.
+        _remove_raw_pdf(pdf_path)
+
         # KPI extraction runs after ingestion succeeds. It's treated as a
         # best-effort enhancement, not a hard requirement: if extraction
         # fails (e.g. LLM hiccup, unusual report format), the document is
@@ -149,9 +143,30 @@ def ingest_document(
             # back or fail the ingestion that already succeeded.
             print(f"[kpi_extraction] Failed for document {document.id}: {extraction_error}")
 
+        # Retention runs only now — after the new document succeeded and
+        # its KPIs were attempted — so we never evict old data in exchange
+        # for an ingestion that didn't work. It's housekeeping: a failure
+        # here must not turn a successful ingestion into an error.
+        try:
+            enforce_retention(db, keep_document_id=document.id)
+        except Exception as retention_error:
+            db.rollback()
+            print(f"[retention] Failed after ingesting document {document.id}: {retention_error}")
+
         return document
 
     except Exception:
         document.status = "failed"
         db.commit()
+        # Failed uploads would otherwise leak their PDF on disk forever.
+        _remove_raw_pdf(pdf_path)
         raise
+
+
+def _remove_raw_pdf(pdf_path: Path) -> None:
+    """Best-effort delete of the raw PDF. A failed unlink only logs —
+    it must never change the outcome of the ingestion."""
+    try:
+        pdf_path.unlink(missing_ok=True)
+    except Exception as unlink_error:
+        print(f"[ingestion] Could not delete raw PDF '{pdf_path}': {unlink_error}")

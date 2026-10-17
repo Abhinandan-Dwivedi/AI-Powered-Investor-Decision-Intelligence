@@ -104,17 +104,10 @@ def ingest_document(
         db.commit()
         db.refresh(document)
 
-        # The raw PDF is only needed for conversion. Chunks now live in
-        # Qdrant (and KPI extraction reads from there), so keeping the
-        # file just grows disk usage forever.
+       
         _remove_raw_pdf(pdf_path)
 
-        # KPI extraction runs after ingestion succeeds. It's treated as a
-        # best-effort enhancement, not a hard requirement: if extraction
-        # fails (e.g. LLM hiccup, unusual report format), the document is
-        # still fully ingested and searchable via chat — we just won't have
-        # dashboard KPI cards for it yet. This mirrors how the reranker
-        # degrades gracefully rather than blocking the whole chat request.
+      
         try:
             metrics = extract_kpis(
                 company=company,

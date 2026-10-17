@@ -6,8 +6,7 @@ from app.core.config import settings
 
 @lru_cache(maxsize=1)
 def _get_model():
-    # Lazy import: sentence_transformers pulls in torch, which takes seconds
-    # to import. Only pay that when this backend is actually used.
+     
     from sentence_transformers import CrossEncoder
 
     return CrossEncoder(settings.cross_encoder_model, max_length=512)
@@ -20,9 +19,7 @@ def warm_up() -> None:
 
 
 def _sigmoid(x: float) -> float:
-    # ms-marco cross-encoders output raw logits (e.g. 6.2 or -10.4).
-    # Sigmoid maps them to a 0-1 relevance probability without changing
-    # the ranking. Split form avoids math.exp overflow on large inputs.
+    
     if x >= 0:
         return 1.0 / (1.0 + math.exp(-x))
     z = math.exp(x)
@@ -42,8 +39,6 @@ def rerank(question: str, candidates: list[dict], top_k: int | None = None) -> l
             show_progress_bar=False,
         )
     except Exception as e:
-        # Same graceful degradation as the LLM reranker: keep vector-search
-        # order rather than failing the chat request.
         print(f"[cross_encoder] failed, using vector order: {e}")
         return candidates[:top_k]
 

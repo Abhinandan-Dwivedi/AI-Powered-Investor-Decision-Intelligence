@@ -24,8 +24,7 @@ def enforce_retention(db: Session, keep_document_id: int | None = None) -> list[
     completed = (
         db.query(Document)
         .filter(Document.status == "completed")
-        # id as a tiebreaker keeps the ordering stable if two rows share
-        # the same created_at timestamp.
+       
         .order_by(Document.created_at.desc(), Document.id.desc())
         .all()
     )
@@ -38,30 +37,23 @@ def enforce_retention(db: Session, keep_document_id: int | None = None) -> list[
     evicted_ids: list[int] = []
 
     for doc in to_evict:
-        # Capture identifying fields up front: after delete + commit the
-        # ORM instance is expired and attribute access would fail.
+       
         doc_id, company, fiscal_year = doc.id, doc.company, doc.fiscal_year
         try:
             # 1. Vectors in Qdrant.
             delete_by_content_hash(doc.content_hash)
-
-            # 2. Any raw PDF left behind (e.g. ingested before PDFs were
-            #    deleted on success, or a failed unlink).
+ 
             if raw_dir.exists():
                 for leftover in raw_dir.glob(f"{doc.content_hash}_*"):
                     leftover.unlink(missing_ok=True)
-
-            # 3. KPI rows — must go before the Document row because of the
-            #    financial_metrics.document_id foreign key.
+ 
             db.query(FinancialMetric).filter(
                 FinancialMetric.document_id == doc_id
             ).delete(synchronize_session=False)
 
-            # 4. The Document row itself.
+          
             db.delete(doc)
-
-            # Commit per document so one bad eviction doesn't undo the
-            # ones that already succeeded.
+ 
             db.commit()
             evicted_ids.append(doc_id)
             print(
@@ -69,8 +61,7 @@ def enforce_retention(db: Session, keep_document_id: int | None = None) -> list[
                 f"(company={company}, fiscal_year={fiscal_year})"
             )
         except Exception as eviction_error:
-            # Roll back so the session is usable for the next document;
-            # the Document row survives and the next run will retry.
+       
             db.rollback()
             print(f"[retention] Failed to evict document id={doc_id}: {eviction_error}")
 

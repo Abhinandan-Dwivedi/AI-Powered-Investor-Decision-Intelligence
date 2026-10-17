@@ -45,9 +45,7 @@ def answer_question(
     top-N vector search results directly, bypassing the LLM rerank call.
     """
 
-    # 1. Embed the question with the SAME embedding model used at ingestion —
-    #    mixing embedding models between ingestion and query would produce
-    #    vectors that aren't comparable, silently breaking retrieval.
+ 
     query_vector = embed_query(question)
 
     raw_results = vector_search(

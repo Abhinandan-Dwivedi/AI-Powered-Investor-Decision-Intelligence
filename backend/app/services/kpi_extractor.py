@@ -49,8 +49,7 @@ def _fetch_document_chunks(company: str, fiscal_year: int, content_hash: str, li
         limit=limit,
         with_payload=True,
     )
-    # Preserve original document order using chunk_index, so the LLM reads
-    # the report roughly front-to-back rather than in arbitrary order.
+    
     points.sort(key=lambda p: p.payload.get("chunk_index", 0))
     return [p.payload["text"] for p in points]
 
@@ -77,8 +76,7 @@ def extract_kpis(company: str, fiscal_year: int, content_hash: str) -> Financial
     extracted_json["company"] = company
     extracted_json["fiscal_year"] = fiscal_year
 
-    # Pydantic validation happens here — this is where the string-vs-list
-    # normalization and blank-string cleanup from kpi.py actually run.
+  
     return FinancialMetrics(**extracted_json)
 
 

@@ -55,9 +55,6 @@ def embed_texts(texts: list[str]) -> list[list[float]]:
         return []
 
     if settings.llm_provider == "gemini":
-        # Gemini rejects batches over 100 texts (400 INVALID_ARGUMENT), so a
-        # report with >100 chunks must be split. Batching here (not inside
-        # _embed_gemini) means a retry only re-sends the batch that failed.
         vectors: list[list[float]] = []
         for start in range(0, len(texts), _GEMINI_MAX_BATCH):
             vectors.extend(_embed_gemini(texts[start : start + _GEMINI_MAX_BATCH]))

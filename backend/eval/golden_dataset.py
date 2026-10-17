@@ -23,7 +23,5 @@ GOLDEN_QUESTIONS = [
         "expected_fiscal_year": 2024,
         "expected_keywords": ["services", "13%"],
     },
-    # Add more questions here as you ingest more filings — each new
-    # company/year you add should get at least 2-3 golden questions
-    # covering both a hard number and a qualitative fact.
+    
 ]

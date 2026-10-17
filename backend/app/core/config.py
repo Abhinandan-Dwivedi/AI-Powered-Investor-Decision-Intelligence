@@ -12,7 +12,6 @@ class Settings(BaseSettings):
     environment: str = "development"  # development | production
 
     # --- Postgres ---
-    # Local dev: docker-compose Postgres. Production: Supabase connection string.
     postgres_host: str = "localhost"
     postgres_port: int = 5432
     postgres_user: str = "postgres"

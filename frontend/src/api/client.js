@@ -1,9 +1,3 @@
-/**
- * Centralized API client. Every backend call goes through here — no
- * component calls fetch() directly. This keeps the API contract in
- * one place, matching the pattern used on the backend (one settings
- * module, one place that knows the DB URL, etc.)
- */
 const BASE = "/api"; // proxied to FastAPI by vite.config.js in dev
 
 async function request(path, options = {}) {

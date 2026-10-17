@@ -9,9 +9,6 @@ const ROWS = [
   { key: "total_liabilities", label: "Total liabilities" },
 ];
 
-// Display-only: split "$97,690 million" into a bold figure and a muted
-// unit so the number reads first. Anything that doesn't match the
-// pattern is rendered exactly as the backend sent it.
 const UNIT_PATTERN = /^(.*\d)\s+(thousand|million|billion|trillion|lakh|crore|mn|bn|m|b)$/i;
 
 function KpiValue({ value }) {

@@ -1,16 +1,3 @@
-"""
-Runs the golden question set through the real RAG chat pipeline and
-reports two numbers per question:
-
-  - retrieval hit:     did we pull context from the right document?
-  - keyword coverage:  does the generated answer actually contain the
-                        expected facts?
-
-Run from the backend/ directory (needs the app importable + live
-Postgres/Qdrant/LLM key configured):
-
-    python -m eval.run_retrieval_eval
-"""
 import sys
 from pathlib import Path
 

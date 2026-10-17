@@ -33,9 +33,7 @@ def rerank(question: str, candidates: list[dict], top_k: int | None = None) -> l
         )
         scores = _parse_score_array(raw_response, expected_length=len(candidates))
     except Exception:
-        # Reranking is an enhancement, not a hard dependency — if the LLM
-        # call or parsing fails, fall back to original vector-search order
-        # (assigning a neutral score) rather than breaking the chat request.
+     
         scores = [5.0] * len(candidates)
 
     scored = [

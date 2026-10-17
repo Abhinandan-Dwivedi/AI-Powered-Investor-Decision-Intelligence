@@ -58,8 +58,7 @@ def ingest_document(
     pdf_path = raw_dir / f"{content_hash}_{filename}"
     pdf_path.write_bytes(file_bytes)
 
-    # Create the Document row up front with status="processing" so partial
-    # failures are visible in the DB rather than silently vanishing.
+    
     document = Document(
         company=company,
         fiscal_year=fiscal_year,

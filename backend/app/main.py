@@ -8,15 +8,13 @@ from app.core.config import settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: ensure Postgres tables and Qdrant collection exist.
+   
     from app.services.db import init_db
     from app.services.vector_store import init_vector_store
 
     init_db()
     init_vector_store()
 
-    # Load the cross-encoder once at startup (only when it's the selected
-    # reranker) so the first chat request doesn't pay the model load time.
     if settings.reranker_backend == "cross_encoder":
         from app.services.cross_encoder_reranker import warm_up
 
@@ -51,10 +49,6 @@ from app.routers import chat, ingestion, metrics  # noqa: E402
 app.include_router(ingestion.router, prefix="/api", tags=["Ingestion"])
 app.include_router(chat.router, prefix="/api", tags=["Chat"])
 app.include_router(metrics.router, prefix="/api", tags=["Metrics"])
-
-# Added in later steps:
-# from app.routers import dashboard
-# app.include_router(dashboard.router, prefix="/api", tags=["Dashboard"])
 
 
 if __name__ == "__main__":

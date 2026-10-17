@@ -1,18 +1,3 @@
-"""
-A/B test: runs the golden question set through the RAG pipeline twice —
-once WITH the LLM reranking step, once WITHOUT (raw vector search order
-only) — and compares retrieval hit rate + keyword coverage side by
-side.
-
-This answers a concrete question: "is the reranking step actually
-helping, and by how much?" — rather than assuming it does because it's
-architecturally sensible.
-
-Run from the backend/ directory (needs live Postgres/Qdrant/LLM key,
-and documents matching golden_dataset.py already ingested):
-
-    python -m eval.run_reranking_ab_test
-"""
 import sys
 import time
 from pathlib import Path

@@ -1,7 +1,3 @@
-"""Compare no reranking vs LLM reranker vs cross-encoder on the golden set.
-
-    python -m eval.run_reranker_comparison
-"""
 import sys
 import time
 from pathlib import Path

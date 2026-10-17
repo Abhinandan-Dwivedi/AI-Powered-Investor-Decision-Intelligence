@@ -1,17 +1,3 @@
-"""
-Golden evaluation set for the RAG chat pipeline.
-
-Each entry is a question with a known-correct expected source document
-and a small set of keywords/facts that MUST appear in a correct
-answer. This is intentionally small and hand-curated rather than
-auto-generated — a golden set only has value if you trust every entry
-is actually correct, which requires a human to have checked it against
-the source filing.
-
-Fill in real values matching whatever filings you've actually
-ingested (company names, fiscal years) before running the eval script.
-"""
-
 GOLDEN_QUESTIONS = [
     {
         "question": "What was Apple's total revenue in fiscal year 2024?",

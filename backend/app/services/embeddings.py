@@ -34,10 +34,6 @@ def _embed_openai(texts: list[str]) -> list[list[float]]:
     return [item.embedding for item in response.data]
 
 
-# Longer retry than OpenAI: the Gemini free tier allows ~100 embedded texts
-# per minute, so a report with >100 chunks hits 429 on its second batch.
-# Backoff of roughly 4+8+16+32+60s gives well over a minute of retrying,
-# enough to outlast one quota window instead of failing the ingestion.
 @retry(stop=stop_after_attempt(6), wait=wait_exponential(multiplier=2, min=4, max=60))
 def _embed_gemini(texts: list[str]) -> list[list[float]]:
     from google.genai import types

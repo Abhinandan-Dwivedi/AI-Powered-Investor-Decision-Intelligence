@@ -1,9 +1,3 @@
-"""
-Postgres engine + session management.
-
-Works identically against local Docker Postgres (dev) and Supabase
-(production) — only the connection string in Settings changes.
-"""
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 

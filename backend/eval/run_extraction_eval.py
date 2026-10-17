@@ -1,12 +1,3 @@
-"""
-Compares stored FinancialMetric rows against hand-verified ground
-truth, reporting field-level extraction accuracy.
-
-Run from the backend/ directory (needs a live DB with already-ingested
-documents matching the companies/years in golden_kpis.py):
-
-    python -m eval.run_extraction_eval
-"""
 import sys
 from pathlib import Path
 

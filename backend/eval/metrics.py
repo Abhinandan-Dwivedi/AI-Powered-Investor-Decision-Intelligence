@@ -1,10 +1,3 @@
-"""
-Pure scoring functions for the evaluation harness. No network calls,
-no DB — these just compare structured inputs and produce numbers, so
-they can be unit tested in isolation from the LLM/retrieval pipeline
-they're meant to evaluate.
-"""
-
 
 def retrieval_hit(sources: list[dict], expected_company: str, expected_fiscal_year: int) -> bool:
     """Did at least one retrieved source come from the expected document?

@@ -1,15 +1,3 @@
-"""
-Cross-encoder reranker: a local alternative to the LLM reranker.
-
-Why a cross-encoder: it reads the question and a chunk together in one
-forward pass, so it judges "does this chunk answer this question" more
-precisely than embedding similarity. Unlike the LLM reranker it is
-deterministic, free, and has no rate limit. The cost is a heavy PyTorch
-dependency and a slow first load, so the model is loaded once per process.
-
-Same interface as reranker.rerank(question, candidates, top_k), so
-rag_chat_service can switch between them via settings.reranker_backend.
-"""
 import math
 from functools import lru_cache
 

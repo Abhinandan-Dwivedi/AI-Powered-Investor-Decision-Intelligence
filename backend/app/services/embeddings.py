@@ -1,15 +1,3 @@
-"""
-Embedding generation, provider-switchable via settings.llm_provider.
-
-Design note: this module is the ONLY place that knows which embedding
-provider we're using. Every other module (ingestion, retrieval) just
-calls embed_texts()/embed_query() and gets back plain float lists —
-swapping providers here never requires touching calling code.
-
-Gemini is the default because Google AI Studio offers a genuinely
-free, rate-limited tier (no prepaid credit required), which is
-friendlier for development than OpenAI's current pay-first model.
-"""
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 from app.core.config import settings 

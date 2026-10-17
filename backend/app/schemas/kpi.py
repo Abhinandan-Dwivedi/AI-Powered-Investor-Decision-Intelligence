@@ -1,15 +1,3 @@
-"""
-Structured KPI extraction schema.
-
-Design note (fixing a real bug found in the reference project): the
-LLM is asked to return growth_drivers/risk_factors as JSON arrays, but
-LLMs occasionally return a single string instead of a list — especially
-when there's only one point to make. The reference repo's save logic
-assumed a list and called .join() directly, which broke silently or
-crashed depending on the value. Here, a field_validator normalizes
-str -> [str] before the value ever reaches the database, so downstream
-code can always safely assume a list.
-"""
 from pydantic import BaseModel, field_validator
 
 

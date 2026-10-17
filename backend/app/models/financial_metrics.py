@@ -1,15 +1,3 @@
-"""
-Core tables.
-
-Design notes vs. the reference project:
-- risk_factors / growth_drivers are JSONB arrays, not newline-joined
-  strings. That earlier approach caused stray text (even an HTML
-  snippet) to leak into the data. JSONB lets the frontend render each
-  bullet directly without string parsing.
-- `documents` tracks every ingested file by content hash, so the same
-  PDF uploaded twice is detected and skipped instead of silently
-  duplicating chunks in the vector store.
-"""
 from datetime import datetime
 
 from sqlalchemy import String, Integer, DateTime, ForeignKey, UniqueConstraint

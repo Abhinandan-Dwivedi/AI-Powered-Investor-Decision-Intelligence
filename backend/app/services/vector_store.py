@@ -1,11 +1,3 @@
-"""
-Qdrant vector store service.
-
-Unlike the reference project (which computed embeddings but then
-queried Azure Search with `search_text=`, silently falling back to
-keyword search), every query here goes through `query_points` with a
-real dense vector — this is actual vector search.
-"""
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance,

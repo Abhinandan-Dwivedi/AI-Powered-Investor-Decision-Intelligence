@@ -1,10 +1,3 @@
-"""
-Centralized application configuration.
-
-Every setting the app needs lives here, sourced from environment
-variables (.env locally, real env vars in production). No other
-module should call os.getenv directly — import `settings` instead.
-"""
 from functools import lru_cache
 
 from pydantic import field_validator

@@ -1,10 +1,3 @@
-"""
-LLM answer generation, provider-switchable via settings.llm_provider.
-
-Mirrors the pattern in embeddings.py: this is the only module that
-knows which chat provider is configured. Callers just get a string
-back from generate_answer().
-"""
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 from app.core.config import settings

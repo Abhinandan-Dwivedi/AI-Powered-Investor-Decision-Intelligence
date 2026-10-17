@@ -1,7 +1,3 @@
-"""
-RAG chat orchestration: embed question -> vector search -> rerank ->
-build grounded prompt -> generate answer.
-"""
 from app.core.config import settings
 from app.services.embeddings import embed_query
 from app.services.llm_generation import generate_answer

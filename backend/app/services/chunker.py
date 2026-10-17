@@ -1,12 +1,3 @@
-"""
-Chunking service.
-
-We use a Markdown-aware recursive splitter: it tries to split on
-headers and paragraph boundaries first, falling back to sentences,
-then words, only if a section is still too large. This avoids cutting
-a financial statement or bullet point in half, which plain
-fixed-length chunking tends to do.
-"""
 from dataclasses import dataclass
 
 from langchain_text_splitters import MarkdownTextSplitter

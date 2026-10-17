@@ -1,10 +1,3 @@
-"""
-Single FastAPI application entrypoint.
-
-Design note: the reference project we reviewed had two competing
-entrypoints (app.py and main.py) with overlapping routes. We keep
-exactly one app object, and every route lives in app/routers/.
-"""
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI

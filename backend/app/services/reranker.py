@@ -1,16 +1,3 @@
-"""
-Reranking: takes the top-K vector search results and re-scores them
-for actual relevance to the question, keeping only the best few.
-
-Why this matters: vector similarity search finds chunks that are
-SEMANTICALLY CLOSE to the query, which isn't the same as "most useful
-to answer this exact question." Two sections about "gross margin" can
-sit close together in embedding space even if only one actually
-answers a specific question about margin change year-over-year.
-
-We use an LLM-as-reranker here (cheap Gemini/OpenAI call scoring each
-chunk 0-10).
-"""
 import json
 import re
 

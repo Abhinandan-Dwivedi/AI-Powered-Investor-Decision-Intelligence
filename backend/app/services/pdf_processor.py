@@ -1,11 +1,3 @@
-"""
-PDF -> Markdown conversion.
-
-We convert to Markdown before chunking (rather than chunking raw
-extracted text) because Markdown preserves structural signals —
-headings, tables, lists — that make semantic chunking far more
-reliable on financial reports, which are heavily sectioned.
-"""
 import hashlib
 from pathlib import Path
 import pymupdf4llm

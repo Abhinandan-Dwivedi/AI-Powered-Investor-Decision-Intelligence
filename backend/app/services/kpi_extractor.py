@@ -1,14 +1,3 @@
-"""
-KPI extraction: after a document is ingested, pull its own chunks back
-out of Qdrant (filtered by company + fiscal_year + content_hash) and
-ask the LLM to extract structured financial metrics + qualitative
-insights from them.
-
-Why filter by content_hash specifically: if the same company/year has
-multiple filings (e.g., an amended 10-K), we want extraction to run
-against exactly the document that was just ingested, not blend chunks
-from a different filing of the same company/year together.
-"""
 import json
 import re
 

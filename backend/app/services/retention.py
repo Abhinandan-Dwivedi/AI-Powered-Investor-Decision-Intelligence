@@ -1,17 +1,3 @@
-"""
-Retention policy: keep only the newest `settings.max_documents`
-completed documents.
-
-Without this, every upload adds vectors to Qdrant and rows to Postgres
-forever. After each successful ingestion we evict the oldest completed
-documents beyond the cap.
-
-Deletion order per document is deliberate: external stores first
-(Qdrant vectors, leftover PDF files), Postgres last. If anything fails
-midway, the Document row still exists, so the next run finds it again
-and retries the cleanup. Deleting the Postgres row first would leave
-orphaned vectors that nothing points to and nothing will ever clean up.
-"""
 from pathlib import Path
 
 from sqlalchemy.orm import Session

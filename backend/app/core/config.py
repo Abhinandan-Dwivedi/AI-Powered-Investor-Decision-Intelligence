@@ -34,7 +34,6 @@ class Settings(BaseSettings):
     qdrant_collection: str = "financial_documents"
 
     # --- LLM provider ---
-    # We use direct provider APIs, not cloud wrappers (Azure, etc.)
     llm_provider: str = "gemini"  # "openai" | "anthropic" | "gemini"
     openai_api_key: str | None = None
     anthropic_api_key: str | None = None
@@ -57,18 +56,13 @@ class Settings(BaseSettings):
     max_upload_size_mb: int = 25
     raw_pdf_dir: str = "data/raw_pdfs"
     markdown_dir: str = "data/markdown"
-
-    # --- Retention ---
-    # Only the newest N *completed* documents are kept; older ones are
-    # evicted (vectors, leftover PDFs, KPI rows, Document row) after each
-    # successful ingestion so storage doesn't grow without bound.
+ 
     max_documents: int = 2
 
     @field_validator("max_documents")
     @classmethod
     def _max_documents_at_least_one(cls, value: int) -> int:
-        # 0 would mean "evict everything", including the document that was
-        # just ingested — fail fast at startup instead of losing data.
+        
         if value < 1:
             raise ValueError("max_documents must be >= 1")
         return value

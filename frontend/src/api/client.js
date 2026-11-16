@@ -1,6 +1,9 @@
-const BASE = (
-  import.meta.env.RENDER_API_BASE_URL || "/api"
-).replace(/\/$/, "");
+const configuredApiBase = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/+$/, "");
+const BASE = configuredApiBase
+  ? configuredApiBase.endsWith("/api")
+    ? configuredApiBase
+    : `${configuredApiBase}/api`
+  : "/api";
 
 async function request(path, options = {}) {
   const res = await fetch(`${BASE}${path}`, {

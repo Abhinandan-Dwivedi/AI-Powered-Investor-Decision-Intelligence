@@ -2,11 +2,23 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
+from app.models.financial_metrics import Document
+from app.schemas.document import DocumentResponse
 from app.schemas.ingestion import IngestionResponse
 from app.services.db import get_db
 from app.services.ingestion_service import DuplicateDocumentError, ingest_document
 
 router = APIRouter()
+
+
+@router.get("/documents", response_model=list[DocumentResponse])
+def list_documents(db: Session = Depends(get_db)):
+    return (
+        db.query(Document)
+        .filter(Document.status == "completed")
+        .order_by(Document.created_at.desc(), Document.id.desc())
+        .all()
+    )
 
 
 @router.post("/ingest", response_model=IngestionResponse)

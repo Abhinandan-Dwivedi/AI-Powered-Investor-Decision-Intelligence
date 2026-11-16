@@ -15,5 +15,6 @@ def chat(request: ChatRequest):
         question=request.question,
         company=request.company,
         fiscal_year=request.fiscal_year,
+        content_hash=request.content_hash,
     )
     return ChatResponse(**result)

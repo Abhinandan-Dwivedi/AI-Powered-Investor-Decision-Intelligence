@@ -36,6 +36,7 @@ def answer_question(
     question: str,
     company: str | None = None,
     fiscal_year: int | None = None,
+    content_hash: str | None = None,
     reranker: str | None = None, 
 ) -> dict:
     """Returns {"answer": str, "sources": list[dict]}.
@@ -52,6 +53,7 @@ def answer_question(
         query_vector=query_vector,
         company=company,
         fiscal_year=fiscal_year,
+        content_hash=content_hash,
         top_k=settings.retrieval_top_k,
     )
 

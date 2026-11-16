@@ -26,10 +26,19 @@ export function fetchMetrics({ company, fiscalYear } = {}) {
   return request(`/metrics${query}`);
 }
 
-export function sendChatMessage({ question, company, fiscalYear }) {
+export function fetchDocuments() {
+  return request("/documents");
+}
+
+export function sendChatMessage({ question, company, fiscalYear, contentHash }) {
   return request("/chat", {
     method: "POST",
-    body: JSON.stringify({ question, company, fiscal_year: fiscalYear }),
+    body: JSON.stringify({
+      question,
+      company,
+      fiscal_year: fiscalYear,
+      content_hash: contentHash,
+    }),
   });
 }
 

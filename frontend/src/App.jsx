@@ -5,33 +5,45 @@ import CompanySelector from "./components/CompanySelector";
 import KpiLedger from "./components/KpiLedger";
 import InsightColumns from "./components/InsightColumns";
 import ChatPanel from "./components/ChatPanel";
-import { fetchMetrics } from "./api/client";
+import { fetchDocuments, fetchMetrics } from "./api/client";
 import "./App.css";
 
 export default function App() {
   const [metrics, setMetrics] = useState([]);
-  const [selectedScope, setSelectedScope] = useState(null);
+  const [documents, setDocuments] = useState([]);
+  const [selectedContentHash, setSelectedContentHash] = useState("");
   const [loadError, setLoadError] = useState(null);
 
-  async function reloadMetrics() {
+  async function reloadData() {
     try {
-      const data = await fetchMetrics();
-      setMetrics(data);
-      if (!selectedScope && data.length > 0) {
-        setSelectedScope({ company: data[0].company, fiscal_year: data[0].fiscal_year });
-      }
+      const [metricsData, documentsData] = await Promise.all([
+        fetchMetrics(),
+        fetchDocuments(),
+      ]);
+      setMetrics(metricsData);
+      setDocuments(documentsData);
+      setSelectedContentHash((current) =>
+        documentsData.some((document) => document.content_hash === current)
+          ? current
+          : documentsData[0]?.content_hash || ""
+      );
+      setLoadError(null);
     } catch (err) {
       setLoadError(err.message);
     }
   }
 
   useEffect(() => {
-    reloadMetrics();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    reloadData();
   }, []);
 
+  const selectedDocument =
+    documents.find((document) => document.content_hash === selectedContentHash) || null;
+
   const activeMetric = metrics.find(
-    (m) => m.company === selectedScope?.company && m.fiscal_year === selectedScope?.fiscal_year
+    (m) =>
+      m.company === selectedDocument?.company &&
+      m.fiscal_year === selectedDocument?.fiscal_year
   );
 
   return (
@@ -40,20 +52,24 @@ export default function App() {
         <div className="app-main-inner">
           <div className="app-header">
             <Masthead />
-            {metrics.length > 0 && (
-              <CompanySelector metrics={metrics} selected={selectedScope} onChange={setSelectedScope} />
+            {documents.length > 0 && (
+              <CompanySelector
+                documents={documents}
+                selected={selectedDocument}
+                onChange={setSelectedContentHash}
+              />
             )}
           </div>
 
           {loadError && <p className="app-load-error">Could not reach the backend: {loadError}</p>}
 
-          <UploadPanel onIngested={reloadMetrics} />
+          <UploadPanel onIngested={reloadData} />
           <KpiLedger metric={activeMetric} />
           <InsightColumns metric={activeMetric} />
         </div>
       </main>
 
-      <ChatPanel scope={selectedScope} />
+      <ChatPanel scope={selectedDocument} />
     </div>
   );
 }

@@ -49,6 +49,7 @@ def search(
     query_vector: list[float],
     company: str | None = None,
     fiscal_year: int | None = None,
+    content_hash: str | None = None,
     top_k: int | None = None,
 ):
     """Real vector similarity search, optionally filtered by metadata."""
@@ -59,6 +60,8 @@ def search(
         conditions.append(FieldCondition(key="company", match=MatchValue(value=company)))
     if fiscal_year:
         conditions.append(FieldCondition(key="fiscal_year", match=MatchValue(value=fiscal_year)))
+    if content_hash:
+        conditions.append(FieldCondition(key="content_hash", match=MatchValue(value=content_hash)))
 
     query_filter = Filter(must=conditions) if conditions else None
 

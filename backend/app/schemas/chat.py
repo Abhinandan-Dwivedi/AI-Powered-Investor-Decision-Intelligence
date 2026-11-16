@@ -5,6 +5,7 @@ class ChatRequest(BaseModel):
     question: str
     company: str | None = None       # optional filter, e.g. "Apple"
     fiscal_year: int | None = None   # optional filter, e.g. 2024
+    content_hash: str | None = None  # optional exact filing filter
 
 
 class SourceChunk(BaseModel):

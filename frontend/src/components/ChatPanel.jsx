@@ -31,6 +31,7 @@ export default function ChatPanel({ scope }) {
         question,
         company: scope?.company,
         fiscalYear: scope?.fiscal_year,
+        contentHash: scope?.content_hash,
       });
       setMessages((prev) => [
         ...prev,

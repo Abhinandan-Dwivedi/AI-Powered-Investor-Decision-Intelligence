@@ -6,6 +6,7 @@ from qdrant_client.models import (
     Filter,
     FieldCondition,
     MatchValue,
+    PayloadSchemaType,
 )
 
 from app.core.config import settings
@@ -36,6 +37,23 @@ def init_vector_store() -> None:
         print(f"[qdrant] Created collection '{settings.qdrant_collection}'.")
     else:
         print(f"[qdrant] Collection '{settings.qdrant_collection}' already exists.")
+
+    # Qdrant Cloud rejects filters on unindexed payload fields. Both chat
+    # and KPI extraction filter by these fields, including existing collections.
+    payload_schema = client.get_collection(settings.qdrant_collection).payload_schema
+    for field_name, field_schema in (
+        ("company", PayloadSchemaType.KEYWORD),
+        ("fiscal_year", PayloadSchemaType.INTEGER),
+        ("content_hash", PayloadSchemaType.KEYWORD),
+    ):
+        if field_name not in payload_schema:
+            client.create_payload_index(
+                collection_name=settings.qdrant_collection,
+                field_name=field_name,
+                field_schema=field_schema,
+                wait=True,
+            )
+            print(f"[qdrant] Created payload index '{field_name}'.")
 
 
 def upsert_chunks(points: list[PointStruct]) -> None:

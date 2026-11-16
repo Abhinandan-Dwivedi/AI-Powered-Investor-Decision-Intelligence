@@ -30,20 +30,6 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Allow the React dev server (and later, the deployed frontend) to call the API.
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "https://ai-powered-investor-decision-intell.vercel.app",
-        *([settings.frontend_url.rstrip("/")] if settings.frontend_url else []),
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 @app.get("/health")
 def health_check():
     return {"status": "healthy", "environment": settings.environment}
@@ -54,6 +40,21 @@ from app.routers import chat, ingestion, metrics  # noqa: E402
 app.include_router(ingestion.router, prefix="/api", tags=["Ingestion"])
 app.include_router(chat.router, prefix="/api", tags=["Chat"])
 app.include_router(metrics.router, prefix="/api", tags=["Metrics"])
+
+# Wrap the entire application so unhandled server errors also carry CORS
+# headers instead of appearing in the browser as an opaque fetch failure.
+app = CORSMiddleware(
+    app=app,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://ai-powered-investor-decision-intell.vercel.app",
+        *([settings.frontend_url.rstrip("/")] if settings.frontend_url else []),
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 if __name__ == "__main__":

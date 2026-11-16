@@ -50,6 +50,14 @@ def ingest_document(
 
     existing = db.query(Document).filter(Document.content_hash == content_hash).first()
     if existing:
+        # Previously uploaded documents may have no KPIs because extraction
+        # failed. Retry only that step; their vectors are already indexed.
+        if existing.status == "completed" and not (
+            db.query(FinancialMetric)
+            .filter(FinancialMetric.document_id == existing.id)
+            .first()
+        ):
+            _extract_and_save_kpis(db, existing)
         raise DuplicateDocumentError(existing)
 
     # Persist the raw PDF to disk for traceability / re-processing later.
@@ -108,32 +116,7 @@ def ingest_document(
         _remove_raw_pdf(pdf_path)
 
       
-        try:
-            metrics = extract_kpis(
-                company=company,
-                fiscal_year=fiscal_year,
-                content_hash=content_hash,
-            )
-            db.add(
-                FinancialMetric(
-                    document_id=document.id,
-                    company=metrics.company,
-                    fiscal_year=metrics.fiscal_year,
-                    revenue=metrics.revenue,
-                    net_income=metrics.net_income,
-                    operating_income=metrics.operating_income,
-                    operating_cash_flow=metrics.operating_cash_flow,
-                    total_assets=metrics.total_assets,
-                    total_liabilities=metrics.total_liabilities,
-                    growth_drivers=metrics.growth_drivers,
-                    risk_factors=metrics.risk_factors,
-                )
-            )
-            db.commit()
-        except Exception as extraction_error:
-            # Log and move on — do not let a KPI extraction failure roll
-            # back or fail the ingestion that already succeeded.
-            print(f"[kpi_extraction] Failed for document {document.id}: {extraction_error}")
+        _extract_and_save_kpis(db, document)
 
         # Retention runs only now — after the new document succeeded and
         # its KPIs were attempted — so we never evict old data in exchange
@@ -153,6 +136,36 @@ def ingest_document(
         # Failed uploads would otherwise leak their PDF on disk forever.
         _remove_raw_pdf(pdf_path)
         raise
+
+
+def _extract_and_save_kpis(db: Session, document: Document) -> None:
+    """Extract KPIs without invalidating an already indexed document."""
+    document_id = document.id
+    try:
+        metrics = extract_kpis(
+            company=document.company,
+            fiscal_year=document.fiscal_year,
+            content_hash=document.content_hash,
+        )
+        db.add(
+            FinancialMetric(
+                document_id=document_id,
+                company=metrics.company,
+                fiscal_year=metrics.fiscal_year,
+                revenue=metrics.revenue,
+                net_income=metrics.net_income,
+                operating_income=metrics.operating_income,
+                operating_cash_flow=metrics.operating_cash_flow,
+                total_assets=metrics.total_assets,
+                total_liabilities=metrics.total_liabilities,
+                growth_drivers=metrics.growth_drivers,
+                risk_factors=metrics.risk_factors,
+            )
+        )
+        db.commit()
+    except Exception as extraction_error:
+        db.rollback()
+        print(f"[kpi_extraction] Failed for document {document_id}: {extraction_error}")
 
 
 def _remove_raw_pdf(pdf_path: Path) -> None:

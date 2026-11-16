@@ -1,11 +1,14 @@
 from functools import lru_cache
 
-from pydantic import field_validator
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    # --- Frontend ---
+    frontend_url: str | None = None  # e.g. "https://myapp.com" (used for CORS in production)
 
     # --- App ---
     app_name: str = "AI-Powered Investor Decision Intelligence" 
@@ -19,8 +22,18 @@ class Settings(BaseSettings):
     postgres_db: str = "investor_intel"
     postgres_sslmode: str = "disable"  # "require" in production (Supabase)
 
+    # Render provides PostgreSQL as a single URL.
+    database_url_env: str | None = Field(
+        default=None,
+        validation_alias="DATABASE_URL",
+    )
+
     @property
     def database_url(self) -> str:
+        if self.database_url_env:
+            return self.database_url_env.replace(
+            "postgres://", "postgresql://", 1
+        )
         return (
             f"postgresql+psycopg2://{self.postgres_user}:{self.postgres_password}"
             f"@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
@@ -61,7 +74,7 @@ class Settings(BaseSettings):
     @field_validator("max_documents")
     @classmethod
     def _max_documents_at_least_one(cls, value: int) -> int:
-        
+        """Ensure max_documents is at least 1."""
         if value < 1:
             raise ValueError("max_documents must be >= 1")
         return value

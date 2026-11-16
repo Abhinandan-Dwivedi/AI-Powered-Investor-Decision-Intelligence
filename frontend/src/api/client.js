@@ -1,4 +1,6 @@
-const BASE = "/api"; // proxied to FastAPI by vite.config.js in dev
+const BASE = (
+  import.meta.env.RENDER_API_BASE_URL || "/api"
+).replace(/\/$/, "");
 
 async function request(path, options = {}) {
   const res = await fetch(`${BASE}${path}`, {

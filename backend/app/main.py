@@ -34,9 +34,11 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-    "http://localhost:5173",
-    "http://localhost:3000",
-    *([settings.frontend_url] if settings.frontend_url else []),],
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://ai-powered-investor-decision-intell.vercel.app",
+        *([settings.frontend_url.rstrip("/")] if settings.frontend_url else []),
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
